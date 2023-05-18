@@ -1,10 +1,10 @@
-import { Response, Request, Router } from "express";
+import { Router } from "express";
 import * as Ctrl from "../controller/";
 import {
-  ValidatUpdateUser,
-  validateGetOneUser,
-  validateRegisterUser,
-} from "../validator/user.validator";
+  ValidatorHeroeRegister,
+  ValidatorHeroeRegisterGet,
+  validatorHeroeUpdate,
+} from "../validator/hero.validator";
 import { Session } from "../middleware/auth.middlewate";
 import { CheckRole } from "../middleware/role.middleware";
 
@@ -13,23 +13,23 @@ router.get("/", Ctrl.getAllUSer);
 router.post(
   "/",
   Session,
-  CheckRole(["user", "admin"]),
-  validateRegisterUser,
-  Ctrl.RegisterCtrl
+  CheckRole(["admin", "user"]),
+  ValidatorHeroeRegister,
+  Ctrl.Register
 );
-router.get("/:_id", validateGetOneUser, Ctrl.getOne);
+router.get("/:_id", Session, ValidatorHeroeRegisterGet, Ctrl.getOneHeroe);
 router.put(
   "/:_id",
   Session,
   CheckRole(["admin"]),
-  ValidatUpdateUser,
-  Ctrl.updateOne
+  validatorHeroeUpdate,
+  Ctrl.updateOneHeroe
 );
 router.delete(
   "/:_id",
   Session,
   CheckRole(["admin"]),
-  validateGetOneUser,
-  Ctrl.deleteOne
+  ValidatorHeroeRegisterGet,
+  Ctrl.deleteOneHeroe
 );
 export { router };
